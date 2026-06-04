@@ -79,6 +79,8 @@ pnpm tauri build
 
 Release 安装包路径：`src-tauri/target/release/bundle/nsis/`。若 Rust 构建缓存异常，可执行 `pnpm run cargo:clean` 后重新构建。
 
+首次发版或打 GitHub/Gitee Release 的步骤见 [RELEASE.md](./RELEASE.md)（标签 `v1.0.0` + 上传安装包）。
+
 应用图标：编辑 `src-tauri/icons/source/*.svg`，执行 `pnpm run icons:gen` 重新生成各尺寸资源。
 
 ## 本地数据
