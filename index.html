@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark" data-accent="sky">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>安全组同步</title>
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="hero">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect class="logo-bg" width="36" height="36" rx="8" />
+              <path
+                d="M11 18h5.5l1.5 6 3.5-14 1.5 6H28"
+                stroke="currentColor"
+                stroke-width="1.85"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>安全组同步</h1>
+            <p class="subtitle">公网 IP 变动时同步至云安全组（当前支持阿里云）</p>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <div id="monitorBadge" class="status-badge status-badge--idle">
+            <span class="status-dot"></span>
+            <span class="status-badge-text">未监听</span>
+          </div>
+          <button
+            type="button"
+            id="btnOpenSettings"
+            class="btn btn--settings"
+            title="打开设置"
+            aria-label="打开设置"
+          >
+            <svg class="btn--settings__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="btn--settings__label">设置</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- 首页：状态概览 -->
+      <div class="page" data-page-panel="home">
+        <section class="home-hero card">
+          <div class="home-hero-row home-hero-row--head">
+            <div id="homeIpLabelMount"></div>
+            <span id="syncStatusPill" class="sync-pill sync-pill--stopped">—</span>
+          </div>
+          <div class="home-hero-row home-hero-row--ip">
+            <p id="homeCurrentIp" class="ip-hero-value ip-hero-value--xl">—</p>
+            <div class="home-hero-actions">
+              <button type="button" id="btnSync" class="btn btn--primary">立即同步</button>
+              <button type="button" id="btnForceSync" class="btn btn--secondary" title="即使 IP 未变也按当前公网 IP 重写规则">强制同步</button>
+              <button type="button" id="btnToggleMonitor" class="btn btn--secondary">开始监听</button>
+            </div>
+          </div>
+          <p id="homeMsg" class="home-hero-msg" role="status"></p>
+        </section>
+
+        <section class="card home-stats home-stats--compact">
+          <div class="card-head">
+            <span class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <h2>同步状态</h2>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-tile">
+              <span class="stat-tile-label">上次同步 IP</span>
+              <span id="homeLastIp" class="stat-tile-value mono">—</span>
+            </div>
+            <div class="stat-tile">
+              <span class="stat-tile-label">上次同步时间</span>
+              <span id="homeLastSyncAt" class="stat-tile-value">—</span>
+            </div>
+            <div class="stat-tile stat-tile--accent">
+              <span class="stat-tile-label">下次检查时间</span>
+              <span id="homeNextCheckAt" class="stat-tile-value">—</span>
+            </div>
+            <div class="stat-tile">
+              <span class="stat-tile-label">轮询间隔</span>
+              <span id="homePollInterval" class="stat-tile-value">—</span>
+            </div>
+            <div class="stat-tile">
+              <span class="stat-tile-label">地域</span>
+              <span id="homeRegion" class="stat-tile-value">—</span>
+            </div>
+            <div class="stat-tile">
+              <span class="stat-tile-label">安全组</span>
+              <span id="homeSecurityGroup" class="stat-tile-value mono">—</span>
+            </div>
+            <div class="stat-tile">
+              <span class="stat-tile-label">同步规则数</span>
+              <span id="homeRulesCount" class="stat-tile-value">—</span>
+            </div>
+          </div>
+        </section>
+
+        <div id="homeErrorBox" class="error-box hidden">
+          <span class="error-box-label">最近错误</span>
+          <p id="homeLastError" class="error-box-text">—</p>
+        </div>
+
+        <p id="homeConfigHint" class="home-hint home-hint--warn hidden">请先在设置 → 同步配置中完成凭证、地域与安全组。</p>
+        <section class="activity-log card">
+          <div class="activity-log__head">
+            <div class="activity-log__head-text">
+              <h2 class="activity-log__title">
+                最近操作
+                <span id="homeActivityLogCap" class="activity-log__cap">仅保留最近 50 条操作记录</span>
+              </h2>
+            </div>
+            <button type="button" id="btnClearActivityLog" class="btn btn--ghost activity-log__clear" title="清空已保存的操作记录">清空</button>
+          </div>
+          <ul id="homeActivityLog" class="activity-log__list" aria-live="polite"></ul>
+          <p id="homeActivityEmpty" class="activity-log__empty">暂无记录</p>
+        </section>
+        <p class="home-hint">公网 IP 变化时，仅在各端口替换上次同步的 IP；同端口其它 IP 规则保持不变。</p>
+      </div>
+
+      <!-- 设置页 -->
+      <div class="page page--hidden" data-page-panel="settings">
+        <div class="page-toolbar page-toolbar--settings">
+          <button type="button" id="btnBackHome" class="btn btn--ghost btn--back">← 返回首页</button>
+          <p id="settingsMsg" class="inline-msg page-toolbar__msg" role="status"></p>
+          <div id="toolbarSaveGroup" class="page-toolbar__save">
+            <button type="button" id="btnSave" class="btn btn--primary">保存配置</button>
+          </div>
+        </div>
+
+        <div id="settingsShellMount" class="settings-page-body"></div>
+      </div>
+
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

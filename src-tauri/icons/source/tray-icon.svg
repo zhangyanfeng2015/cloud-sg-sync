@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Cloud SG Sync tray">
+  <path
+    d="M512 232 L360 304 V528 Q360 712 512 800 Q664 712 664 528 V304 Z"
+    fill="#000000"
+  />
+  <circle cx="512" cy="508" r="92" fill="#000000"/>
+  <path
+    d="M 196 536 A 340 340 0 1 1 828 536"
+    fill="none"
+    stroke="#000000"
+    stroke-width="88"
+    stroke-linecap="round"
+  />
+  <path d="M828 536 L760 456 L872 504 Z" fill="#000000"/>
+</svg>

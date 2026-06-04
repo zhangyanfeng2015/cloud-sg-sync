@@ -1,0 +1,105 @@
+/* Element Plus ↔ 应用主题（强调色随 data-accent 变化） */
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --el-bg-color: var(--bg-elevated);
+  --el-bg-color-overlay: var(--bg-card);
+  --el-fill-color-blank: var(--bg-input);
+  --el-fill-color-light: var(--accent-subtle);
+  --el-border-color: var(--border);
+  --el-border-color-light: var(--border);
+  --el-border-color-lighter: var(--border);
+  --el-border-color-hover: var(--accent);
+  --el-text-color-primary: var(--text);
+  --el-text-color-regular: var(--text);
+  --el-text-color-secondary: var(--text-muted);
+  --el-text-color-placeholder: var(--text-dim);
+  --el-color-primary: var(--accent);
+  --el-color-primary-light-3: color-mix(in srgb, var(--accent) 72%, #fff);
+  --el-color-primary-light-5: color-mix(in srgb, var(--accent) 52%, var(--bg-elevated));
+  --el-color-primary-light-7: color-mix(in srgb, var(--accent) 32%, var(--bg-elevated));
+  --el-color-primary-light-8: var(--accent-subtle);
+  --el-color-primary-light-9: var(--accent-subtle);
+  --el-color-primary-dark-2: var(--accent-2);
+  --el-color-danger: var(--danger);
+  --el-disabled-bg-color: var(--bg-subtle);
+  --el-disabled-text-color: var(--text-dim);
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --el-bg-color: var(--bg-elevated);
+  --el-bg-color-overlay: var(--bg-card);
+  --el-fill-color-blank: var(--bg-input);
+  --el-fill-color-light: var(--accent-subtle);
+  --el-border-color: var(--border);
+  --el-border-color-light: var(--border);
+  --el-border-color-lighter: var(--border);
+  --el-border-color-hover: var(--accent);
+  --el-text-color-primary: var(--text);
+  --el-text-color-regular: var(--text);
+  --el-text-color-secondary: var(--text-muted);
+  --el-text-color-placeholder: var(--text-dim);
+  --el-color-primary: var(--accent);
+  --el-color-primary-light-3: color-mix(in srgb, var(--accent) 70%, #fff);
+  --el-color-primary-light-5: color-mix(in srgb, var(--accent) 45%, #fff);
+  --el-color-primary-light-7: var(--accent-subtle);
+  --el-color-primary-light-8: var(--accent-subtle);
+  --el-color-primary-light-9: var(--accent-subtle);
+  --el-color-primary-dark-2: var(--accent-2);
+  --el-color-danger: var(--danger);
+}
+
+/* 同步配置 / 规则表：统一控件外框，内层 input 不重复描边 */
+.ep-form-root {
+  .el-select__wrapper,
+  .el-input__wrapper {
+    border-radius: 6px;
+    background-color: var(--el-fill-color-blank);
+    box-shadow: 0 0 0 1px var(--el-border-color) inset;
+  }
+
+  .el-select__wrapper.is-focused,
+  .el-input__wrapper.is-focus {
+    box-shadow: 0 0 0 1px var(--el-color-primary) inset;
+  }
+
+  .el-select__input,
+  .el-input__inner {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0;
+  }
+}
+
+.port-select-popper.el-popper,
+.sync-config-popper.el-popper,
+.rules-editor-popper.el-popper {
+  border-color: var(--el-border-color);
+  background: var(--el-bg-color-overlay);
+}
+
+.port-select-popper .el-select-group__title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--el-text-color-secondary);
+}
+
+.port-select-popper .el-select-dropdown__item.is-selected,
+.sync-config-popper .el-select-dropdown__item.is-selected {
+  color: var(--el-color-primary);
+  font-weight: 600;
+}
+
+.port-select-popper .el-select-dropdown__item.is-selected .port-select__option-port {
+  color: var(--el-color-primary);
+}
