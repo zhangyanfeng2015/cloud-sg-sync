@@ -21,7 +21,9 @@
     "cargo:clean": "cargo clean --manifest-path src-tauri/Cargo.toml",
     "icons:gen:app": "tauri icon src-tauri/icons/source/app-icon.svg -o src-tauri/icons",
     "icons:gen:tray": "tauri icon src-tauri/icons/source/tray-icon.svg -o src-tauri/icons/tray-out && node scripts/copy-tray-ico.mjs",
-    "icons:gen": "pnpm run icons:gen:app && pnpm run icons:gen:tray"
+    "icons:gen": "pnpm run icons:gen:app && pnpm run icons:gen:tray",
+    "release": "node scripts/release-build.mjs",
+    "release:tag": "node scripts/release-tag.mjs"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",

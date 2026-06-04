@@ -1,8 +1,11 @@
 use tauri::{
+    image::Image,
     menu::{Menu, MenuItem},
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
     AppHandle, Emitter, Manager,
 };
+
+const TRAY_ICON: &[u8] = include_bytes!("../../icons/tray.ico");
 
 use crate::app::config;
 use crate::commands;
@@ -21,7 +24,11 @@ pub fn setup(app: &AppHandle) -> tauri::Result<()> {
     let quit = MenuItem::with_id(app, ID_QUIT, "退出", true, None::<&str>)?;
     let menu = Menu::with_items(app, &[&show, &toggle, &sync, &quit])?;
 
+    let icon = Image::from_bytes(TRAY_ICON)?;
+
     TrayIconBuilder::new()
+        .icon(icon)
+        .icon_as_template(true)
         .menu(&menu)
         .tooltip("安全组同步")
         .on_menu_event(|app, event| match event.id().as_ref() {
